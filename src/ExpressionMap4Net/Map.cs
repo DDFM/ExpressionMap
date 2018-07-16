@@ -6,18 +6,20 @@ namespace ExpressionMap4Net
 {
     public sealed class Map<TIn, TOut>
     {
-        public static Map<TIn, TOut> Instance { get; } = new Map<TIn, TOut>();
-        private static ParameterExpression _parameterExpression = Expression.Parameter(typeof(TIn), "p");
+        public static Map<TIn, TOut> Instance { get; private set; }
+        private static readonly ParameterExpression _parameterExpression = Expression.Parameter(typeof(TIn), "p");
         private static Func<TIn, TOut> _func = null;
         private static Dictionary<string, Expression> _dict_rule = new Dictionary<string, Expression>();
 
         private Map() { }
+
         /// <summary>
-        /// 关于泛型的静态方法使用还存在疑问
+        /// 初始化
         /// </summary>
-        //static Map() {
-        //    Instance = new Map<TIn, TOut>();
-        //}
+        static Map()
+        {
+            Instance = new Map<TIn, TOut>();
+        }
         /// <summary>
         /// 转换
         /// </summary>

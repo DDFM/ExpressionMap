@@ -10,36 +10,26 @@ namespace ExpressionMap4NetTest
         [TestMethod]
         public void TestMethod1()
         {
-            //var obj1 = new { Prop1 = "obj1_1", Prop2 = "obj1_2" };
-            //var obj2 = new { Prop1 = "obj2_1", Prop2 = "obj2_2", Prop3 = "obj2_3" };
-
-            //var obj3 = new { Prop1 = obj1.Prop1, Prop2 = obj2.Prop2, Prop3 = "obj3_3" };
-            //var obj4 = new { Prop1 = obj1.Prop1, Prop2 = obj1.Prop1 + obj2.Prop2, Prop3 = "obj3_3" };
-
-            //Expression<Func<DtoA, DtoB>> t0 = (a) =>
-            //new DtoB() { P1 = a.F1 };
-
-
-            //Expression<Func<DtoA, string>> t = (a) =>
-            //Convert.ToString(Convert.ToString(a.P1) + "b");
-            //var newExpression = MapExpressionVisitor.ParseToBody(t,typeof(DtoA));
-
-
-
-
             DtoA dtoa = new DtoA() { F2 = 1, P1 = "P1", P2 = "P2" };
             Map<DtoA, DtoB>.Instance
-                .DefineRule(x => x.F1, x => x.F1 + x.F2)
+                .DefineRule(x => x.F1, from => from.F1 + from.F2)
                 .DefineRule(x => x.P1, from => Convert.ToString(from.F2))
                 .CreatRule();
             Map<DtoA, DtoC>.Instance
-                .DefineRule(x => x.F1, x => x.F1 + x.F2)
+                .DefineRule(x => x.F1, from => from.F1 + from.F2)
                 .DefineRule(x => x.P1, from => Convert.ToString(from.F2))
+                .DefineRule(x => x.P3, from => Tran(from.F2))
                 .CreatRule();
-            var dtoC = Map<DtoA, DtoC>.Instance.Trans(dtoa);
             var dtoB = Map<DtoA, DtoB>.Instance.Trans(dtoa);
+            var dtoC = Map<DtoA, DtoC>.Instance.Trans(dtoa);
+        }
+        public string Tran(int t)
+        {
+            return t.ToString() + 100;
         }
     }
+
+
     public class DtoA
     {
         public string F1;
